@@ -1,76 +1,86 @@
-var admobid = {}
-if (/(android)/i.test(navigator.userAgent)) {  // for android & amazon-fireos
-    admobid = {
-        banner: 'ca-app-pub-3868593263837372/8649306643',
-        interstitial: 'ca-app-pub-3868593263837372/5758755042',
-    }
-}
-
-function onLoad() {
-    if ((/(ipad|iphone|ipod|android|windows phone)/i.test(navigator.userAgent))) {
-        document.addEventListener('deviceready', initApp, false);
-    } else {
-        initApp();
-    }
-}
-
-function initApp() {
-
-    window.addEventListener('filePluginIsReady', function () {
-        alert('File plugin is ready');
-
-        window.requestFileSystem(window.TEMPORARY, 5 * 1024 * 1024, function (fs) {
-
-            console.log('file system open: ' + fs.name);
-            alert('file system open: ' + fs.name);
-            createFile(fs.root, "newTempFile.txt", false);
-
-        }, onErrorLoadFs);
-
-    }, false);
+var fileHandling = {
+    textButton : "0",
+    //textButton= 1 for  write file
+    //            2 for read file
     
-}
-
-function createFile(dirEntry, fileName, isAppend) {
-    alert('Inside create file');
-    // Creates a new file or returns the file if it already exists.
-    dirEntry.getFile(fileName, {create: true, exclusive: false}, function(fileEntry) {
-
-        writeFile(fileEntry, null, isAppend);
-
-    }, onErrorCreateFile);
-
-}
-
-function writeFile(fileEntry, dataObj) {
-    // Create a FileWriter object for our FileEntry (log.txt).
-    fileEntry.createWriter(function (fileWriter) {
-
-        fileWriter.onwriteend = function() {
-            console.log("Successful file write...");
-            alert('Successful file write...');
-            readFile(fileEntry);
-        };
-
-        fileWriter.onerror = function (e) {
-            console.log("Failed file write: " + e.toString());
-            alert("Failed file write: " + e.toString());
-        };
-
-        // If data object is not passed in,
-        // create a new Blob instead.
-        if (!dataObj) {
-            dataObj = new Blob(['some file data'], { type: 'text/plain' });
+    initialize : function(){
+       fileHandling.textButton = "0";
+       document.addEventListener("deviceready", fileHandling.createFile, false);
+    },
+    
+    submitButtonClicked : function(){
+        fileHandling.textButton = "1";
+        //alert(fileHandling.textSummitbutton);
+        var data= document.getElementById("textInputField").value;
+        document.addEventListener("deviceready", fileHandling.createFile, false);
+        
+    },
+    
+    showTextFileClicked : function(){
+        fileHandling.textButton = "2";
+        document.addEventListener("deviceready", fileHandling.createFile, false);
+    },
+    
+    
+    
+    createFile : function(){
+        //alert(dataLocsation);
+        if(fileHandling.textButton == "0"){
+            var dataLocation = cordova.file.documentsDirectory
+        }else{
+            var dataLocation = cordova.file.documentsDirectory + "/file.txt";;
         }
+        
+        window.resolveLocalFileSystemURL(dataLocation, fileHandling.fileCreationSuccess, fileHandling.fileCreationFailed); //retrieve DirectoryEntry or FileEntry using local URL
+    },
+    
+    fileCreationSuccess : function(fileEntry){  //fileEntry = our file object
+        
+        //alert(fileEntry.name); // file.txt
+        if(fileHandling.textButton == "1"){
+            //getFile(,,onSuccess,) onSuccess is passed fileEntry object.
+            //fileEntry.getFile("file.txt", {create:true,exclusive:false}, fileHandling.writeOnFile, fileHandling.fail);
+            fileEntry.createWriter(function(writer){
+                                   writer.write(document.getElementById("textInputField").value);
+                                   alert("File has been written");
+                                   },fileHandling.fail);
+            
+            
+        }else if(fileHandling.textButton == "2"){
+            fileEntry.file(function(filee) {
+                           var reader = new FileReader();
+                           reader.onloadend = function(e) { //asynchronous method so, when whole file has been read the statement inside it can be executed
+                           //console.log("Text is: "+this.result);
+                           document.getElementById("textFromLocalFile").innerHTML = reader.result;
+                           }
+                           
+                           reader.readAsText(filee); //used to read text file.
+                     
+                     // alert(filee.name);
+                           },fileHandling.fail);
 
-        fileWriter.write(dataObj);
-    });
-}
+            
+        }else{
+            fileEntry.getFile("file.txt",{create:true, exclusive:true},
+                                function(){alert("file Created");},
+                                function(){alert("file already present");}
+                            );
+            }
+    },
+    
+  
+    
+//    writeOnFile : function(fileEntry){
+//        fileEntry.createWriter(function(writer){
+//                               writer.write(document.getElementById("textInputField").value);
+//                               alert("File has been written");
+//                               },fileHandling.fail);
+//    },
+    
+    fail : function(evt){
+        alert(evt.target.error.code);
+    }
+    
+};
 
-function onErrorLoadFs(){
-    alert('onErrorLoadFs');
-}
-
-function onErrorCreateFile(){
-    alert('onErrorCreateFile');
-}
+fileHandling.initialize();
