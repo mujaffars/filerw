@@ -6,7 +6,7 @@ if (/(android)/i.test(navigator.userAgent)) {  // for android & amazon-fireos
     }
 }
 
-function onLoad() { alert(899)
+function onLoad() {
     if ((/(ipad|iphone|ipod|android|windows phone)/i.test(navigator.userAgent))) {
         document.addEventListener('deviceready', initApp, false);
     } else {
@@ -22,6 +22,7 @@ function initApp() {
         window.requestFileSystem(window.TEMPORARY, 5 * 1024 * 1024, function (fs) {
 
             console.log('file system open: ' + fs.name);
+            alert('file system open: ' + fs.name);
             createFile(fs.root, "newTempFile.txt", false);
 
         }, onErrorLoadFs);
@@ -47,11 +48,13 @@ function writeFile(fileEntry, dataObj) {
 
         fileWriter.onwriteend = function() {
             console.log("Successful file write...");
+            alert('Successful file write...');
             readFile(fileEntry);
         };
 
         fileWriter.onerror = function (e) {
             console.log("Failed file write: " + e.toString());
+            alert("Failed file write: " + e.toString());
         };
 
         // If data object is not passed in,
