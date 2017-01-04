@@ -6,7 +6,7 @@ if (/(android)/i.test(navigator.userAgent)) {  // for android & amazon-fireos
     }
 }
 
-function onLoad() {
+function onLoad() { alert(899)
     if ((/(ipad|iphone|ipod|android|windows phone)/i.test(navigator.userAgent))) {
         document.addEventListener('deviceready', initApp, false);
     } else {
