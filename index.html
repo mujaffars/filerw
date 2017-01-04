@@ -28,22 +28,34 @@
             * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
                 * Enable inline JS: add 'unsafe-inline' to default-src
         -->
-<!--        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">-->
+        <!--        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">-->
         <meta name="format-detection" content="telephone=no">
         <meta name="msapplication-tap-highlight" content="no">
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
         <link rel="stylesheet" type="text/css" href="css/index.css">
-            <script type="text/javascript" src="cordova.js"></script>
-<!--            <script type="text/javascript" src="js/index.js"></script>-->
-            <script type="text/javascript" src="js/init.js"></script>
-<!--            <script type="text/javascript" src="js/custom.js"></script>-->
+        <script type="text/javascript" src="cordova.js"></script>
+        <!--            <script type="text/javascript" src="js/index.js"></script>-->
+        <script type="text/javascript" src="js/helper.js"></script>
+        <!--            <script type="text/javascript" src="js/custom.js"></script>-->
+        <script type="text/javascript" src="cordova.js">
+            Ready(function () { 
+                setTimeout(function () {
+                    fileWR.save2file('hola.txt', 'mundo', function () {
+                        fileWR.readFile('hola.txt', function () {
+                            document.body.innerHTML = this.result;
+                        });
+                    }, false);
+                }, 2000);
+            });
+        </script>
+
         <title>Hello World</title>
     </head>
     <body>
         <div class="app">
             <div id="deviceready" >
                 <div id="textFromLocalFile">
-                  this is test
+                    this is test
                 </div>
                 <div>
                     <input id="textInputField" type="text"></input>
@@ -52,10 +64,10 @@
                 <div>
                     <button id="textReadButton" onclick="fileHandling.showTextFileClicked()">Show text file</button>
                 </div>
-                
-                
+
+
             </div>
         </div>
-       
+
     </body>
 </html>

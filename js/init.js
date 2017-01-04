@@ -3,14 +3,14 @@ var fileHandling = {
     //textButton= 1 for  write file
     //            2 for read file
     
-    initialize : function(){
+    initialize : function(){ alert(899)
        fileHandling.textButton = "0";
        document.addEventListener("deviceready", fileHandling.createFile, false);
     },
     
     submitButtonClicked : function(){
         fileHandling.textButton = "1";
-        //alert(fileHandling.textSummitbutton);
+        alert(fileHandling.textSummitbutton);
         var data= document.getElementById("textInputField").value;
         document.addEventListener("deviceready", fileHandling.createFile, false);
         
