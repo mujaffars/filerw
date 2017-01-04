@@ -14,7 +14,7 @@ var Ready = function(func){
  */
 
 var fileWR = {
-	directory : 'cdvfile://localhost/persistent/',
+	directory : 'cdvfile://localhost/persistent/logs/',
 
 	/**
 	 * @param string
@@ -25,7 +25,7 @@ var fileWR = {
 	 * @return void
 	 * On success pass the fileEntry object
 	 */
-	save2file : function(filename, content, onSuccess, onError, rewrite){ alert('save2file')
+	save2file : function(filename, content, onSuccess, onError, rewrite){
 		var rewrite =
 			typeof rewrite === 'boolean' ?
 				rewrite :
@@ -109,7 +109,7 @@ var fileWR = {
  */
 Ready(function(){
 	setTimeout(function(){
-		fileWR.save2file('huha.txt', 'success', function(){ alert(899)
+		fileWR.save2file('huha.txt', 'success', function(){
 			fileWR.readFile('huha.txt', function(){
 				document.body.innerHTML = this.result;
 			});
