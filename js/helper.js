@@ -14,7 +14,7 @@ var Ready = function(func){
  */
 
 var fileWR = {
-	directory : 'cdvfile://localhost/temporary/',
+	directory : 'cdvfile://localhost/persistent/',
 
 	/**
 	 * @param string
@@ -109,8 +109,8 @@ var fileWR = {
  */
 Ready(function(){
 	setTimeout(function(){
-		fileWR.save2file('hola.txt', 'mundo', function(){
-			fileWR.readFile('hola.txt', function(){
+		fileWR.save2file('huha.txt', 'success', function(){ alert(899)
+			fileWR.readFile('huha.txt', function(){
 				document.body.innerHTML = this.result;
 			});
 		}, false);
