@@ -14,7 +14,7 @@ var Ready = function(func){
  */
 
 var fileWR = {
-	directory : 'cdvfile://localhost/persistent/logs/',
+	directory : 'cdvfile://localhost/persistent/',
 
 	/**
 	 * @param string
